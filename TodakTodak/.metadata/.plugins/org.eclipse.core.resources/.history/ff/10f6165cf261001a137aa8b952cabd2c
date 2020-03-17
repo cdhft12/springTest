@@ -1,0 +1,65 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<%@ page import="java.util.ArrayList" %>   
+<%@ page import="java142.todak.human.vo.ApptVO"%>        
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<title>Insert title here</title>
+	<%
+		Object obj=request.getParameter("apptList");
+		ArrayList aList = (ArrayList)obj;
+	%>
+</head>
+	<body>
+			<div style="height: 200px; width: 735px; border:1px solid black;">
+				<table border="1" align="center">
+					<thead>
+						<tr>
+							<th>발령번호</th>
+							<th>이름</th>
+							<th>발령일</th>
+							<th>발령내용</th>
+							<th>비고</th>
+						</tr>
+<%
+					if(aList.size()!=0)
+					{
+						ApptVO apvo=(ApptVO)aList.get(0);
+						for(int i=0;i<aList.size();i++){
+							apvo=(ApptVO)aList.get(i);		
+%>					
+						<tr>
+							<th><%=apvo.getHpa_tablenum()  %></th>
+							<th><%=apvo.getHpa_name()  %></th>
+							<th><%=apvo.getHpa_appointmentdate()  %></th>
+<%
+							if(apvo.getHpa_appointment().equals("승진")){							
+%>							
+							<th>
+								<%=apvo.getHpa_aposition()%> 
+								이전 직위/직책<%=apvo.getHpa_bposition() %>/<%=apvo.getHpa_bduty() %>
+								이후 직위/직책<%=apvo.getHpa_aposition() %>/<%=apvo.getHpa_aduty() %>
+							</th>							
+<%
+							}
+%>								
+<%
+							if(apvo.getHpa_appointment().equals("부서이동")){
+%>			
+							<th>
+								<%=apvo.getHpa_aposition()%>
+								이전 부서/팀<%=apvo.getHpa_bdept() %>/<%=apvo.getHpa_bteam() %>
+								이후 부서/팀<%=apvo.getHpa_bdept() %>/<%=apvo.getHpa_bteam() %>
+							</th>	
+<%
+							}
+%>		
+							<th><%=apvo.getHpa_contents() %></th>						
+						</tr>	
+					</thead>
+				</table>
+			</div>
+	</body>
+</html>

@@ -1,0 +1,71 @@
+package java142.todak.human.controller;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import java142.todak.common.Paging;
+import java142.todak.common.vo.PagingVO;
+import java142.todak.human.service.HumanService;
+import java142.todak.human.vo.ApprVO;
+import java142.todak.human.vo.MemberVO;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+@Controller
+@RequestMapping(value="/human")
+	public class HumanController {
+		Logger logger = Logger.getLogger(HumanController.class);
+		
+		@Autowired
+		private HumanService humanService;
+		
+		
+		
+		
+	@RequestMapping(value="/select")
+	public String selectMember(@ModelAttribute MemberVO hvo,Model model,HttpServletRequest request){
+		
+		logger.info("slelct 진입");
+		String cPage=request.getParameter("curPage");
+		String pageCtrl=request.getParameter("pageCtrl");
+		
+		logger.info("views->controller"+cPage);
+		
+		logger.info("search = "+hvo.getSearch());
+		logger.info("keyword= "+hvo.getKeyword());
+		if(hvo.getSearch()==null){
+			String key=request.getParameter("key");
+			hvo.setKeyword(key);
+		}
+		if(hvo.getSearch()==null){
+			String ser=request.getParameter("ser");
+			hvo.setSearch(ser);
+		}
+
+		if(cPage==null){
+			Paging.setPage(hvo);
+		}
+		if(cPage!=null){
+			Paging.setPage(hvo,cPage,pageCtrl);
+		}
+		
+		String total=humanService.selectTotal(hvo);
+		hvo.setTotalCount(Integer.parseInt(total));
+		logger.info("total컬럼>>>>>"+hvo.getTotalCount());
+		
+		
+		
+		List<MemberVO> memberList=humanService.selectMember(hvo);
+		
+		model.addAttribute("memberList",memberList);
+		model.addAttribute("hvo",hvo);
+		return "/personnelStatus";
+	}
+}

@@ -1,0 +1,5 @@
+package java142.todak.human.vo;
+
+public class StatusVO {
+
+}

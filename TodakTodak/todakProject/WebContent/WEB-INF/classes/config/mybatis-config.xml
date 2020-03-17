@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+				<typeAliases>
+							<typeAlias type="java142.todak.human.vo.ApprVO" alias="avo"/>
+							<typeAlias type="java142.todak.human.vo.MemberVO" alias="mvo" />
+							<typeAlias type="java142.todak.human.vo.ApptVO" alias="apvo" />
+							<typeAlias type="java142.todak.human.vo.CommVO" alias="cvo" />
+							<typeAlias type="java142.todak.human.vo.StatusVO" alias="svo" />
+				</typeAliases>
+</configuration>
