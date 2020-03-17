@@ -7,6 +7,5 @@
 							<typeAlias type="java142.todak.human.vo.MemberVO" alias="mvo" />
 							<typeAlias type="java142.todak.human.vo.ApptVO" alias="apvo" />
 							<typeAlias type="java142.todak.human.vo.CommVO" alias="cvo" />
-							<typeAlias type="java142.todak.human.vo.StatusVO" alias="svo" />
 				</typeAliases>
 </configuration>

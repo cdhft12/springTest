@@ -10,30 +10,12 @@
 		Object obj=request.getAttribute("apprList");
 		ArrayList aList=(ArrayList)obj;
 		ApprVO avo=null;
-		
-		Object obj2=request.getAttribute("avo");
-		ApprVO pvo=(ApprVO) obj2;
-		
-		int Size=pvo.getPageSize();		
-		
-		int pageSize = pvo.getPageSize();
-		int groupSize = pvo.getGroupSize();
-		int curPage = pvo.getCurPage();
-		int totalCount = pvo.getTotalCount();
-		
-		if(request.getParameter("curPage") != null)
-		{
-			curPage = Integer.parseInt(request.getParameter("curPage"));
-		}
 	%>
 	<title>회원가입 승인 목록</title>
 	<script type="text/javascript"
 				src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
 	<script type="text/javascript">
 		$(function(){
-			if('<%=Size %>' > 0){
-				$("#pageCtrl").val('<%=Size %>');
-			}
 			$(".goDetail").click(function(){
 				var empnum=$(this).parents("tr").attr("data");
 				$("#hmp_empnum").val(empnum);
@@ -45,19 +27,7 @@
 				});
 				$("#detailForm").submit();
 			});
-			$("#pageCtrl").change(function(){
-				goPage(1);
-			});
 		});
-		function goPage(page){
-		
-			$("#page").val(page);
-			$("#PageSearch").attr({
-				"method":"get",
-				"action":"/human/selectAppr.td"
-			});
-			$("#PageSearch").submit();
-		}
 	</script>
 	</head>
 	<body>
@@ -102,41 +72,11 @@
 					</tr>
 <%					
 			}
-%>			
+%>	
 			</div>
 			</thead>
 			</table>
 		</table>	
-			<div id="StatusSearch" name="StatusSearch">
-			<form id="PageSearch" name="PageSearch">
-				<input type="hidden" id="page" name="page" value="1"/>
-			
-				<table summary="검색">
-				<tr>
-					<td id="std1">
-						<select id="pageCtrl" name="pageCtrl">
-							<option value="5">5줄</option>
-							<option value="1">10줄</option>
-							<option value="20">20줄</option>
-							<option value="30">30줄</option>
-							<option value="50">50줄</option>
-						</select>
-					</td>	
-				</tr>
-				</table>
-			</form>
-		</div>
- 	
-		
-		<jsp:include page="paging.jsp" flush="true">
-			<jsp:param name="url" value="/human/selectAppr.td"/>
-			<jsp:param name="str" value=""/>
-			<jsp:param name="pageSize" value="<%=pageSize%>"/>
-			<jsp:param name="groupSize" value="<%=groupSize%>"/>
-			<jsp:param name="curPage" value="<%=curPage%>"/>
-			<jsp:param name="totalCount" value="<%=totalCount%>"/>
-		
-		</jsp:include>
 	</body>
 	
 </html>

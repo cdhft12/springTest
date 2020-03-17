@@ -1,8 +1,6 @@
 package java142.todak.human.vo;
 
-import java142.todak.common.vo.PagingVO;
-
-public class ApprVO extends PagingVO {
+public class ApprVO {
 	private String hmp_empnum;
 	private String hmp_name;
 	private String hmp_birth;

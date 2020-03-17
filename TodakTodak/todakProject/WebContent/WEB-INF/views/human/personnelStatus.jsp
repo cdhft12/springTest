@@ -1,8 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
  <%@ page import="java.util.ArrayList" %>     
- <%@ page import="java142.todak.human.vo.MemberVO"%>
- <%@ page import="java142.todak.human.vo.StatusVO"%>  
+ <%@ page import="java142.todak.human.vo.MemberVO"%> 
   <%@ page import="java142.todak.common.vo.PagingVO"%> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -13,15 +12,6 @@
 		
 		Object obj2=request.getAttribute("hvo");
 		MemberVO pvo=(MemberVO) obj2;
-		
-		Object obj3=request.getAttribute("svo");
-		StatusVO stvo=(StatusVO) obj3;
-		
-		String tCnt=stvo.getHs_total();
-		String cCnt=stvo.getHs_current();
-		String rCnt=stvo.getHs_regular();
-		String conCnt=stvo.getHs_constract();
-		
 		String key=pvo.getKeyword();
 		String ser=pvo.getSearch();
 		
@@ -39,7 +29,6 @@
 		{
 			curPage = Integer.parseInt(request.getParameter("curPage"));
 		}
-		
 	%>
 	<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
 	<title>사원 목록</title>
@@ -98,22 +87,6 @@
 		}
 	</script>
 </head>
-	<table>
-		<thead>	
-				<tr>
-					<th>총인원</th>
-					<th>현재인원</th>
-					<th>정규직</th>
-					<th>계약직</th>
-				</tr>
-				<tr>
-					<th><%=tCnt %></th>
-					<th><%=cCnt %></th>
-					<th><%=rCnt %></th>
-					<th><%=conCnt %></th>
-					
-				</tr>
-	</table>
 	<body>
 	<div id="memberList">
 		<table summary="사원 현황 조회">

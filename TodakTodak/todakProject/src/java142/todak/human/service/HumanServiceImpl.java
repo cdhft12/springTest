@@ -13,7 +13,6 @@ import java142.todak.human.vo.ApprVO;
 import java142.todak.human.vo.ApptVO;
 import java142.todak.human.vo.CommVO;
 import java142.todak.human.vo.MemberVO;
-import java142.todak.human.vo.StatusVO;
 
 @Service
 @Transactional
@@ -104,58 +103,6 @@ public class HumanServiceImpl implements HumanService {
 		return flag;
 	}
 	@Override
-	public boolean updateResignation(MemberVO mvo){
-		boolean flag=false;
-		logger.info("인서트 플래그 >>>>>"+flag);
-		
-		
-		int cnt=humanDao.updateResignation(mvo);
-		if(cnt!=0){
-			flag=true;
-		}
-		logger.info("인서트 플래그 >>>>>"+flag);
-		return flag;
-	}
-	@Override
-	public boolean changeCommuteUpdate(CommVO cvo){
-		boolean flag=false;
-		logger.info("인서트 플래그 >>>>>"+flag);
-		
-		
-		int cnt=humanDao.changeCommuteUpdate(cvo);
-		if(cnt!=0){
-			flag=true;
-		}
-		logger.info("인서트 플래그 >>>>>"+flag);
-		return flag;
-	}
-	@Override
-	public boolean vacationUpdate(CommVO cvo){
-		boolean flag=false;
-		logger.info("인서트 플래그 >>>>>"+flag);
-		
-		
-		int cnt=humanDao.vacationUpdate(cvo);
-		if(cnt!=0){
-			flag=true;
-		}
-		logger.info("인서트 플래그 >>>>>"+flag);
-		return flag;
-	}
-	@Override
-	public boolean halfUpdate(CommVO cvo){
-		boolean flag=false;
-		logger.info("인서트 플래그 >>>>>"+flag);
-		
-		
-		int cnt=humanDao.halfUpdate(cvo);
-		if(cnt!=0){
-			flag=true;
-		}
-		logger.info("인서트 플래그 >>>>>"+flag);
-		return flag;
-	}
-	@Override
 	public boolean insertApptRecord(ApptVO apvo){
 		boolean flag=false;
 		logger.info("인서트 플래그 >>>>>"+flag);
@@ -181,12 +128,6 @@ public class HumanServiceImpl implements HumanService {
 		return apptList;
 	}
 	@Override
-	public List<ApptVO> apptRecordAll(ApptVO apvo){
-		List<ApptVO> apptList=null;
-		apptList=humanDao.apptRecordAll(apvo);
-		return apptList;
-	}
-	@Override
 	public List<MemberVO> selectPersonAppt(MemberVO mvo){
 		List<MemberVO> memberList=null;
 		memberList=humanDao.selectPersonAppt(mvo);
@@ -199,8 +140,8 @@ public class HumanServiceImpl implements HumanService {
 		return memberList;
 	}
 	@Override
-	public StatusVO selectTotal(){
-		return humanDao.selectTotal();
+	public String selectTotal(MemberVO mvo){
+		return humanDao.selectTotal(mvo);
 	}
 	@Override
 	public MemberVO memberInfo(MemberVO mvo){
@@ -235,24 +176,4 @@ public class HumanServiceImpl implements HumanService {
 		avo=humanDao.selectApprMem(avo);
 		return avo;
 	}
-	@Override
-	public List<CommVO> selectLastHour(CommVO cvo) {
-		logger.info("HumanServiceImpl.selectLastHour 진입 >>>>");
-		List<CommVO> sList = null;
-		sList = humanDao.selectLastHour(cvo);
-		logger.info("HumanServiceImpl.selectLastHour 종료 >>>>");
-		return sList;
-	}
-	
-	@Override
-	public boolean insertExtrawork(CommVO cvo){
-		logger.info("HumanServiceImpl.insertExtrawork 진입 >>>>");
-		boolean bFlag = false;
-		int iFlag = humanDao.insertExtrawork(cvo);
-		if(iFlag == 1) bFlag = true;
-		logger.info("HumanServiceImpl.insertExtrawork 종료 >>>>");
-		return bFlag;
-	}
-	
-	
 }

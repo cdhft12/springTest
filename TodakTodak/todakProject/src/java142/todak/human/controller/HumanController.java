@@ -17,7 +17,6 @@ import java142.todak.human.vo.ApprVO;
 import java142.todak.human.vo.ApptVO;
 import java142.todak.human.vo.CommVO;
 import java142.todak.human.vo.MemberVO;
-import java142.todak.human.vo.StatusVO;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,24 +36,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 		private HumanService humanService;
 		
 	@RequestMapping(value="/selectAppr")//회원 가입 대기자 명단 조회	
-	public String  selectMemberAppr(@ModelAttribute ApprVO avo,Model model,HttpServletRequest request)	{
+	public String  selectMemberAppr(@ModelAttribute ApprVO avo,Model model)	{
 		logger.info("selectApptr 진입");
-		int totalCnt=0;
-		
-		String cPage=request.getParameter("curPage");
-		String pageCtrl=request.getParameter("pageCtrl");
-		
-		
-		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"+cPage);
-		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"+pageCtrl);
-		Paging.setPage(avo,cPage,pageCtrl);
-		
-		
 		List<ApprVO> apprList=humanService.selectAppr(avo);
-		totalCnt=apprList.get(0).getTotalCount();
-		avo.setTotalCount(totalCnt);
+
 		model.addAttribute("apprList",apprList);
-		model.addAttribute("avo",avo);
+		
 		return "/human/selectAppr";
 	
 	}
@@ -106,9 +93,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 	@RequestMapping(value="/select")//사원 현황 조회
 	public String selectMember(@ModelAttribute MemberVO mvo,Model model,HttpServletRequest request){
 		int totalCnt=0;
-		int curCnt=0;
-		LoginSession sManager = LoginSession.getInstance();
-		
+	
 		logger.info("slelct 진입");
 		String cPage=request.getParameter("curPage");
 		String pageCtrl=request.getParameter("pageCtrl");
@@ -130,15 +115,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 		
 		logger.info("total컬럼>>>>>"+mvo.getTotalCount());
 		
-		StatusVO svo=new StatusVO();
-		svo=humanService.selectTotal();
-		curCnt=sManager.getUserCount();
-		svo.setHs_current(curCnt+"");
+	
 		
 		List<MemberVO> memberList=humanService.selectMember(mvo);
 		totalCnt=memberList.get(0).getTotalCount();
 		mvo.setTotalCount(totalCnt);
-		model.addAttribute("svo",svo);
 		model.addAttribute("memberList",memberList);
 		model.addAttribute("hvo",mvo);
 		
@@ -209,37 +190,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 		
 		return "/human/ApptRecord";
 	}
-	////////////////////////////////////////////////////////////////////////////////////
-	@RequestMapping(value="/apptAllselect")
-	public String apptRecordSelectAll(@ModelAttribute ApptVO apvo, Model model,HttpSession session,HttpServletRequest request){
-		
-		logger.info("/apptAllselect 진입");
-		
-		String cPage=request.getParameter("curPage");
-		String pageCtrl=request.getParameter("pageCtrl");
-		
-		Paging.setPage(apvo,cPage,pageCtrl);
-		if(apvo.getSearch()==null){
-			String key=request.getParameter("key");
-			apvo.setKeyword(key);
-		}
-		if(apvo.getSearch()==null){
-			String ser=request.getParameter("ser");
-			apvo.setSearch(ser);
-		}
-		System.out.println("dddddd"+apvo.getKeyword());
-		System.out.println("dddddd"+apvo.getSearch());
-		List<ApptVO> apptList=humanService.apptRecordAll(apvo);
-		if(apptList.size()!=0){
-		int totalCnt=apptList.get(0).getTotalCount();
-		apvo.setTotalCount(totalCnt);
-		}
-	
-		model.addAttribute("apvo",apvo);
-		model.addAttribute("apptList",apptList);
-		return "/human/apptRecordAll";
-	}
-	
 	@RequestMapping(value="/appointment")
 	public String apptMember(@ModelAttribute MemberVO mvo,Model model){
 		mvo=humanService.memberInfo(mvo);
@@ -248,7 +198,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 	}
 	@RequestMapping(value="/updateAppt")
 	public String updateMember(@ModelAttribute ApptVO apvo,Model model,HttpSession session){
-		int totalCnt=0;
 		LoginSession sManager = LoginSession.getInstance();
 		logger.info("/updateAppt 진입");
 		logger.info("ApptVO apvo로 넘어온 사원번호"+apvo.getHpa_empnum());
@@ -278,57 +227,38 @@ import org.springframework.web.bind.annotation.ResponseBody;
 		if(duty.equals("67")){
 			duty=apvo.getHpa_bduty();
 		}
-		if(position.equals("74")){
-			position=apvo.getHpa_bposition();
-		}
-		if(duty.equals("74")){
-			duty=apvo.getHpa_bduty();
-		}
 		logger.info("2"+team);
 		logger.info("2"+dept);
 		logger.info("2"+position);
 		logger.info("2"+duty);
 		MemberVO mvo=new MemberVO();
-		if(!apvo.getHpa_appointment().equals("74")){
-			mvo.setHm_empnum(apvo.getHpa_empnum());
-			mvo.setHm_position(position);
-			mvo.setHm_duty(duty);
-			mvo.setHm_teamnum(team);
-			if(!team.equals("73")){
-				mvo.setHm_deptnum(dept+team);
-			}
-			if(team.equals("73")){
-				mvo.setHm_deptnum(dept);
-			}
-			flag=humanService.updateMember(mvo);
-			if(flag){
-				ChaeNo=humanService.chaebunApptRecord();
-				ChaeNo=ChaebunUtils.cNum(ChaeNo, "T");
-				apvo.setHpa_tablenum(ChaeNo);
-				humanService.insertApptRecord(apvo);
-			}
+		mvo.setHm_empnum(apvo.getHpa_empnum());
+		mvo.setHm_position(position);
+		mvo.setHm_duty(duty);
+		mvo.setHm_teamnum(team);
+		if(!team.equals("73")){
+			mvo.setHm_deptnum(dept+team);
 		}
-		if(apvo.getHpa_appointment().equals("74")){
-			mvo.setHm_empnum(apvo.getHpa_empnum());
-			flag=humanService.updateResignation(mvo);
-			if(flag){
-				ChaeNo=humanService.chaebunApptRecord();
-				ChaeNo=ChaebunUtils.cNum(ChaeNo, "T");
-				apvo.setHpa_tablenum(ChaeNo);
-				humanService.insertApptRecord(apvo);
-			}
+		if(team.equals("73")){
+			mvo.setHm_deptnum(dept);
+		}
+		flag=humanService.updateMember(mvo);
+		if(flag){
+			ChaeNo=humanService.chaebunApptRecord();
+			ChaeNo=ChaebunUtils.cNum(ChaeNo, "T");
+			apvo.setHpa_tablenum(ChaeNo);
+			humanService.insertApptRecord(apvo);
 		}
 		String hm_empnum=sManager.getUserID(session.getId());//세션 불러와서 로그인한 아이디의 사번 불러옴
 		mvo.setHm_empnum(hm_empnum);
 		Paging.setPage(mvo,cPage,pageCtrl);
 		logger.info("세션으로 불러온 ID의 사번>>>>>>"+hm_empnum);
-		
-		
+		String total=humanService.selectTotal(mvo);
+		mvo.setTotalCount(Integer.parseInt(total));
 		logger.info("total컬럼>>>>>"+mvo.getTotalCount());
 		//
 		List<MemberVO> apptList=humanService.selectPersonAppt(mvo);
-		totalCnt=apptList.get(0).getTotalCount();
-		mvo.setTotalCount(totalCnt);
+		
 		model.addAttribute("apptList",apptList);
 		model.addAttribute("mvo",mvo);
 		return "/human/selectApptMem";
@@ -567,102 +497,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 	}
 	@RequestMapping(value="/changeComm")
 	public String changeCommute(@ModelAttribute CommVO cvo,Model model,HttpSession session,HttpServletRequest request){
-		logger.info("넘겨밭은 getHc_comnum 값 확인"+cvo.getHc_comnum());
-		String hm_empnum = request.getParameter("hm_empnum");
-		
-		model.addAttribute("hm_empnum",hm_empnum);
-		model.addAttribute("comnum",cvo.getHc_comnum());
+		System.out.println("ddddddd"+cvo.getHc_comnum());
+		model.addAttribute("comnum"+cvo.getHc_comnum());
 		return "/human/chageCommType";
-	}
-	
-	@RequestMapping(value="/changeCommUpdate")
-	public String changeCommuteUpdate(@ModelAttribute CommVO cvo,Model model,HttpSession session,HttpServletRequest request){
-		logger.info("/changeCommUpdate 진입 ");
-		logger.info("cvo.getHc_comnum() >>>> "+cvo.getHc_comnum());
-		logger.info("cvo.getHc_tanda("+cvo.getHc_tanda());
-		String hm_empnum = request.getParameter("hm_empnum");
-		cvo.setHm_empnum(hm_empnum);
-		
-		List<CommVO> selectLastHour = humanService.selectLastHour(cvo);
-		
-		String lasthour = selectLastHour.get(0).getHc_lasthour();
-		String totalhour = selectLastHour.get(0).getHc_totalhour();
-		String extraworking = selectLastHour.get(0).getHc_extraworking();
-		cvo.setHc_lasthour(lasthour);
-		cvo.setHc_totalhour(totalhour);
-		cvo.setHc_extraworking(extraworking);
-		
-		boolean bFlag = false;
-		
-		bFlag = humanService.insertExtrawork(cvo);
-			
-		boolean flag=false;
-		boolean updateFlag=false;
-		flag=humanService.changeCommuteUpdate(cvo);
-		
-		int iLasthour = (int)Double.parseDouble(lasthour);
-		int iExtraworking = (int)Double.parseDouble(extraworking);
-		int iTotalHour = (int)Double.parseDouble(totalhour);
-		int useVacation  = 0;
-	
-		if(cvo.getHc_tanda().equals("72")){ //휴가
-			useVacation = iLasthour - 480;
-			logger.info(">>>>>>>>>>>>>>>>" + iLasthour + " : " + iExtraworking + " : " + useVacation );
-			if(iLasthour > 0 ){
-				logger.info("111111111111111111111111111");
-				if(useVacation >= 0){ 
-					logger.info("2222222222222222222222222222222");
-					iLasthour = useVacation;
-					iExtraworking = 0;
-				}else if(useVacation < 0){ 
-					logger.info("3333333333333333333333333333333");
-					iLasthour = 0;
-					iExtraworking = (useVacation * (-1)) + iExtraworking;
-				}
-			}else if(iLasthour <= 0){
-				logger.info("4444444444444444444444444444");
-				iExtraworking =(useVacation * (-1)) + iExtraworking;
-				iLasthour = 0;
-			}
-		}
-			
-
-			
-		if(cvo.getHc_tanda().equals("49")){ //반차
-			
-			useVacation = iLasthour - 240;
-			
-			logger.info(">>>>>>>>>>>>>>>>" + iLasthour + " : " + iExtraworking + " : " + useVacation );
-			if(iLasthour > 0 ){
-				logger.info("111111111111111111111111111");
-				if(useVacation >= 0){ 
-					logger.info("2222222222222222222222222222222");
-					iLasthour = useVacation;
-					iExtraworking = 0;
-				}
-				else if(useVacation < 0){ 
-					logger.info("3333333333333333333333333333333");
-					iLasthour = 0;
-					iExtraworking = useVacation * (-1);
-				}
-			}else if(iLasthour <= 0){
-				logger.info("4444444444444444444444444444");
-				iExtraworking = (useVacation * (-1)) + iExtraworking;
-				iLasthour = 0;
-			}
-		}
-			
-		logger.info("결과?!?!?>>>>>>>>>>>>>>>>" + iLasthour + " : " + iExtraworking + " : " + useVacation );
-		
-		if(iExtraworking >= 720) iExtraworking = 720;
-		
-		int iWeekhour = (iTotalHour - iLasthour ) + iExtraworking ;
-		cvo.setHc_lasthour(Integer.toString(iLasthour));
-		cvo.setHc_extraworking(Integer.toString(iExtraworking));
-		cvo.setHc_weekhour(Integer.toString(iWeekhour));
-	
-		updateFlag=humanService.halfUpdate(cvo);
-		
-		return "/human/result";
 	}
 }

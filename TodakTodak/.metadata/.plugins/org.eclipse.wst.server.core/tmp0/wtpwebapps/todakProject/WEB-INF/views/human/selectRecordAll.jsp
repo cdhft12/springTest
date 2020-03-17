@@ -112,8 +112,6 @@
 		
 		$(".goDetail").click(function(){
 			alert("디테일 클릭됨!");
-			$("#hm_empnum").val('<%=ser %>');
-			alert($("#hm_empnum").val());
 			var comnum=$(this).parents("tr").attr("data");
 			alert("읽어온 값은"+comnum);
 			console.log("읽어온 값은"+comnum);
@@ -134,7 +132,8 @@
 		
 		$("#selectDate").attr({
 			"method":"get",
-			"action":"/human/commuteALlRecord.td"
+			
+			"action":"/human/changeCommute.td"
 		});
 		$("#selectDate").submit();
 	}
@@ -143,7 +142,6 @@
 	<body>
 		<form name="detailForm" id="detailForm" method="post">
 			<input type="hidden" name="hc_comnum" id="hc_comnum">
-			<input type="hidden" name="hm_empnum" id="hm_empnum">
 		</form>
 		
 		<form id="selectDate" 
@@ -194,8 +192,6 @@
 							extraHour=TimeUnit.MINUTES.toHours(Integer.parseInt(cvo.getHc_extraworking()));
 							extraMinutes=TimeUnit.MINUTES.toMinutes(Integer.parseInt(cvo.getHc_extraworking()))
 						    		   -TimeUnit.HOURS.toMinutes(extraHour);		
-							
-							
 							
 %>						
 						<tr data='<%=cvo.getHc_comnum() %>'>

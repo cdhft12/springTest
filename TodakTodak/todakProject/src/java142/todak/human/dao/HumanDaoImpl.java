@@ -13,7 +13,6 @@ import java142.todak.human.vo.ApprVO;
 import java142.todak.human.vo.ApptVO;
 import java142.todak.human.vo.CommVO;
 import java142.todak.human.vo.MemberVO;
-import java142.todak.human.vo.StatusVO;
 
 @Repository
 public class HumanDaoImpl implements HumanDao {
@@ -63,22 +62,6 @@ public class HumanDaoImpl implements HumanDao {
 		return (int)session.update("updateMember");
 	}
 	@Override
-	public int updateResignation(MemberVO mvo){
-		return (int)session.update("updateResignation");
-	}
-	@Override
-	public int changeCommuteUpdate(CommVO cvo){
-		return (int)session.update("changeCommuteUpdate");
-	}
-	@Override
-	public int vacationUpdate(CommVO cvo){
-		return (int)session.update("vacationUpdate");
-	}
-	@Override
-	public int halfUpdate(CommVO cvo){
-		return (int)session.update("halfUpdate");
-	}
-	@Override
 	public List<MemberVO> selectMember(MemberVO mvo){
 		return session.selectList("selectMember");
 	}
@@ -91,15 +74,11 @@ public class HumanDaoImpl implements HumanDao {
 		return session.selectList("apptRecordSelect");
 	}
 	@Override
-	public List<ApptVO> apptRecordAll(ApptVO apvo){
-		return session.selectList("apptRecordAll");
-	}
-	@Override
 	public List<CommVO> selectCommute(CommVO cvo){
 		return session.selectList("selectCommute");
 	}
 	@Override
-	public StatusVO selectTotal(){
+	public String selectTotal(MemberVO mvo){
 		return session.selectOne("selectTotal");
 	}
 	@Override
@@ -126,16 +105,4 @@ public class HumanDaoImpl implements HumanDao {
 	public ApprVO selectApprMem(ApprVO avo){
 		return session.selectOne("selectApprMem");
 	}
-	
-	
-	@Override
-	public List<CommVO> selectLastHour(CommVO cvo) {
-		return session.selectList("selectLastHour");
-	}
-	
-	@Override
-	public int insertExtrawork(CommVO cvo) {
-		return session.update("insertExtrawork");
-	}
-	
 }

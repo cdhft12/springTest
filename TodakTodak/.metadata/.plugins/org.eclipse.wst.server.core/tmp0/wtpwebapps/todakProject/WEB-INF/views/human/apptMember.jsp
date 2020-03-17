@@ -136,11 +136,6 @@
 				$(".deptTransfer").hide();
 				$(".notes").hide();
 			}
-			if($("#hpa_appointment").val()=="74"){
-				$(".promotion").hide();
-				$(".deptTransfer").hide();
-				$(".notes").show();
-			}
 		});
 	    $("#hpa_appointmentdate").datepicker({
 	    	 dateFormat: 'yymmdd'
@@ -176,7 +171,6 @@
 							<OPTION VALUE="67">== 선택  ==</OPTION>
 							<OPTION VALUE="68">승진</OPTION>
 						    <OPTION VALUE="69">부서이동</OPTION>
-						    <OPTION VALUE="74">퇴사</OPTION>
 							</SELECT>
 						</td>
 						<td>

@@ -14,7 +14,6 @@
 	String ctrl=null;
 	String startday=null;
 	String endday=null;
-	String empnum = null;
 	url = request.getParameter("url");
 	str = request.getParameter("str");
 	keyword=request.getParameter("key");
@@ -23,8 +22,8 @@
 	startday=request.getParameter("sdate");
 	endday=request.getParameter("edate");
 	
-	
-	
+	System.out.println("keyword"+keyword);
+	System.out.println("search"+search);
 	if(str != null)
 	{
 		str = str + "&";
